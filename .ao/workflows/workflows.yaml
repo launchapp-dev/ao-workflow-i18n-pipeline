@@ -1,0 +1,41 @@
+default_workflow_ref: daily-scan
+
+workflows:
+  - id: daily-scan
+    name: "Daily String Scanner"
+    description: "Scans source code for new hardcoded strings, generates translation key suggestions, and updates the English base locale. Run daily or on every commit."
+    phases:
+      - scan-source-code
+      - extract-new-strings
+      - generate-translation-keys
+
+  - id: weekly-audit
+    name: "Weekly Locale Audit"
+    description: "Full validation of all locale files against English source, coverage dashboard generation, and missing-key reports for translators."
+    phases:
+      - collect-locale-stats
+      - validate-all-locales:
+          on_verdict:
+            complete:
+              target: generate-coverage-dashboard
+            partial:
+              target: generate-coverage-dashboard
+            blocking:
+              target: generate-coverage-dashboard
+          max_rework_attempts: 2
+      - generate-coverage-dashboard
+      - flag-missing-in-pr
+
+  - id: release-check
+    name: "Release Readiness Check"
+    description: "Pre-release gate — checks all locale coverage against the release threshold and emits a go/no-go/conditional verdict."
+    phases:
+      - check-release-coverage:
+          on_verdict:
+            complete:
+              target: generate-release-assessment
+            partial:
+              target: generate-release-assessment
+            blocking:
+              target: generate-release-assessment
+      - generate-release-assessment

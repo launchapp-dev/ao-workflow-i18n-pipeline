@@ -1,0 +1,5 @@
+{
+  "scan_initiated_at": "2026-03-31T15:15:32Z",
+  "source_dirs": ["sample-source"],
+  "extensions": [".tsx", ".ts", ".jsx", ".js", ".py"]
+}

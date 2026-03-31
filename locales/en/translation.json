@@ -1,0 +1,108 @@
+{
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "subtitle": "Welcome back",
+      "email_label": "Email address",
+      "password_label": "Password",
+      "submit_button": "Sign in",
+      "forgot_password": "Forgot your password?",
+      "no_account": "Don't have an account?",
+      "signup_link": "Sign up",
+      "error_invalid_credentials": "Invalid email or password. Please try again.",
+      "error_account_locked": "Your account has been locked. Contact support.",
+      "error_too_many_attempts": "Too many login attempts. Please wait {{minutes}} minutes."
+    },
+    "signup": {
+      "title": "Create your account",
+      "name_label": "Full name",
+      "submit_button": "Create account",
+      "terms_agreement": "By signing up, you agree to our Terms of Service and Privacy Policy.",
+      "already_have_account": "Already have an account?",
+      "login_link": "Sign in"
+    },
+    "logout": {
+      "confirm_message": "Are you sure you want to sign out?"
+    }
+  },
+  "dashboard": {
+    "header": {
+      "welcome": "Welcome, {{name}}",
+      "last_login": "Last login: {{date}}"
+    },
+    "nav": {
+      "home": "Home",
+      "settings": "Settings",
+      "help": "Help",
+      "notifications": "Notifications"
+    },
+    "stats": {
+      "total_users": "Total users",
+      "active_today": "Active today",
+      "revenue": "Revenue",
+      "growth": "Growth"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "order_summary": "Order summary",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "place_order": "Place order",
+    "items_count": {
+      "one": "{{count}} item",
+      "other": "{{count}} items"
+    },
+    "error_payment_failed": "Payment failed. Please check your card details.",
+    "error_out_of_stock": "One or more items in your cart are out of stock.",
+    "success_order_placed": "Your order has been placed successfully!"
+  },
+  "common": {
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "submit": "Submit",
+      "back": "Back",
+      "next": "Next",
+      "close": "Close",
+      "confirm": "Confirm",
+      "loading": "Loading..."
+    },
+    "validation": {
+      "required": "This field is required",
+      "invalid_email": "Please enter a valid email address",
+      "password_too_short": "Password must be at least {{min}} characters",
+      "passwords_dont_match": "Passwords do not match",
+      "max_length": "Maximum {{max}} characters allowed"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "network": "Network error. Please check your connection.",
+      "not_found": "The requested resource was not found.",
+      "unauthorized": "You are not authorized to perform this action.",
+      "server_error": "Server error. Our team has been notified."
+    },
+    "time": {
+      "just_now": "Just now",
+      "minutes_ago": "{{count}} minutes ago",
+      "hours_ago": "{{count}} hours ago",
+      "days_ago": "{{count}} days ago"
+    }
+  },
+  "pages": {
+    "not_found": {
+      "title": "Page not found",
+      "message": "The page you are looking for does not exist.",
+      "go_home": "Go to homepage"
+    },
+    "settings": {
+      "title": "Account settings",
+      "language_label": "Language",
+      "timezone_label": "Timezone",
+      "save_success": "Settings saved successfully"
+    }
+  }
+}

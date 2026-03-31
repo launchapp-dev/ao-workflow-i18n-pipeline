@@ -1,0 +1,108 @@
+{
+  "auth": {
+    "login": {
+      "title": "Bei Ihrem Konto anmelden",
+      "subtitle": "Willkommen zurück",
+      "email_label": "E-Mail-Adresse",
+      "password_label": "Passwort",
+      "submit_button": "Anmelden",
+      "forgot_password": "Passwort vergessen?",
+      "no_account": "Noch kein Konto?",
+      "signup_link": "Registrieren",
+      "error_invalid_credentials": "Ungültige E-Mail oder Passwort. Bitte versuchen Sie es erneut.",
+      "error_account_locked": "Ihr Konto wurde gesperrt. Kontaktieren Sie den Support.",
+      "error_too_many_attempts": "Zu viele Anmeldeversuche. Bitte warten Sie {{minutes}} Minuten."
+    },
+    "signup": {
+      "title": "Konto erstellen",
+      "name_label": "Vollständiger Name",
+      "submit_button": "Konto erstellen",
+      "terms_agreement": "Mit der Registrierung stimmen Sie unseren Nutzungsbedingungen und Datenschutzrichtlinien zu.",
+      "already_have_account": "Bereits ein Konto vorhanden?",
+      "login_link": "Anmelden"
+    },
+    "logout": {
+      "confirm_message": "Sind Sie sicher, dass Sie sich abmelden möchten?"
+    }
+  },
+  "dashboard": {
+    "header": {
+      "welcome": "Willkommen, {{name}}",
+      "last_login": "Letzte Anmeldung: {{date}}"
+    },
+    "nav": {
+      "home": "Startseite",
+      "settings": "Einstellungen",
+      "help": "Hilfe",
+      "notifications": "Benachrichtigungen"
+    },
+    "stats": {
+      "total_users": "Gesamtbenutzer",
+      "active_today": "Heute aktiv",
+      "revenue": "Umsatz",
+      "growth": "Wachstum"
+    }
+  },
+  "checkout": {
+    "title": "Kasse",
+    "order_summary": "Bestellübersicht",
+    "subtotal": "Zwischensumme",
+    "tax": "Steuer",
+    "total": "Gesamt",
+    "place_order": "Bestellung aufgeben",
+    "items_count": {
+      "one": "{{count}} Artikel",
+      "other": "{{count}} Artikel"
+    },
+    "error_payment_failed": "Zahlung fehlgeschlagen. Bitte überprüfen Sie Ihre Kartendaten.",
+    "error_out_of_stock": "Ein oder mehrere Artikel in Ihrem Warenkorb sind nicht vorrätig.",
+    "success_order_placed": "Ihre Bestellung wurde erfolgreich aufgegeben!"
+  },
+  "common": {
+    "buttons": {
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "edit": "Bearbeiten",
+      "submit": "Absenden",
+      "back": "Zurück",
+      "next": "Weiter",
+      "close": "Schließen",
+      "confirm": "Bestätigen",
+      "loading": "Wird geladen..."
+    },
+    "validation": {
+      "required": "Dieses Feld ist erforderlich",
+      "invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "password_too_short": "Das Passwort muss mindestens {{min}} Zeichen lang sein",
+      "passwords_dont_match": "Die Passwörter stimmen nicht überein",
+      "max_length": "Maximal {{max}} Zeichen erlaubt"
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "network": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
+      "not_found": "Die angeforderte Ressource wurde nicht gefunden.",
+      "unauthorized": "Sie sind nicht berechtigt, diese Aktion durchzuführen.",
+      "server_error": "Serverfehler. Unser Team wurde benachrichtigt."
+    },
+    "time": {
+      "just_now": "Gerade eben",
+      "minutes_ago": "Vor {{count}} Minuten",
+      "hours_ago": "Vor {{count}} Stunden",
+      "days_ago": "Vor {{count}} Tagen"
+    }
+  },
+  "pages": {
+    "not_found": {
+      "title": "Seite nicht gefunden",
+      "message": "Die gesuchte Seite existiert nicht.",
+      "go_home": "Zur Startseite"
+    },
+    "settings": {
+      "title": "Kontoeinstellungen",
+      "language_label": "Sprache",
+      "timezone_label": "Zeitzone",
+      "save_success": "Einstellungen erfolgreich gespeichert"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+source_dirs:
+  - sample-source
+
+file_extensions:
+  - .tsx
+  - .ts
+  - .jsx
+  - .js
+  - .py
+
+exclude_patterns:
+  - "*.test.*"
+  - "*.spec.*"
+  - "node_modules/"
+  - "dist/"
+  - "__tests__/"
+  - ".ao/"
+
+translation_function_patterns:
+  - "t("
+  - "i18n("
+  - "_('"
+  - 'gettext('
+  - "useTranslation"
+  - "Trans component"
+
+supported_locales:
+  - es
+  - fr
+  - de
+
+# Coverage thresholds
+release_threshold: 95      # % required for release approval
+minimum_threshold: 80      # % below which it's a hard NO-GO
+
+# Criticality namespaces (missing keys here = BLOCKING)
+critical_namespaces:
+  - auth
+  - checkout
+  - errors
+
+# Translation key style
+key_style: dot.notation    # auth.login.title

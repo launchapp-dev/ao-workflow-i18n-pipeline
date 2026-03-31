@@ -1,0 +1,10 @@
+schedules:
+  - id: daily-string-scan
+    cron: "0 9 * * *"
+    workflow_ref: daily-scan
+    enabled: true
+
+  - id: weekly-locale-audit
+    cron: "0 8 * * 1"
+    workflow_ref: weekly-audit
+    enabled: true

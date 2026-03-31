@@ -1,0 +1,20 @@
+key_style: dot.notation
+
+# Map source file path prefixes to namespaces
+namespace_rules:
+  - pattern: "sample-source/auth/"
+    namespace: auth
+  - pattern: "sample-source/dashboard/"
+    namespace: dashboard
+  - pattern: "sample-source/checkout/"
+    namespace: checkout
+  - pattern: "sample-source/components/shared/"
+    namespace: common
+  - pattern: "sample-source/pages/"
+    namespace: pages
+  - default: common
+
+# Locale files location
+locales_dir: locales
+base_locale: en
+locale_file: translation.json

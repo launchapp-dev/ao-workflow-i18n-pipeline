@@ -1,0 +1,188 @@
+phases:
+  # === daily-scan workflow phases ===
+
+  scan-source-code:
+    mode: command
+    command:
+      program: bash
+      args: ["-c", "bash scripts/scan-source.sh"]
+      cwd_mode: project_root
+      timeout_secs: 60
+
+  extract-new-strings:
+    mode: agent
+    agent: string-scanner
+    directive: |
+      Scan the source code for hardcoded strings that need internationalization.
+
+      Steps:
+      1. Read config/scan-config.yaml to understand which directories and file types to scan
+      2. List all source files in the configured source_dirs matching the file_extensions
+      3. For each file, identify hardcoded user-facing strings NOT wrapped in translation calls
+         - Look for JSX string literals, UI labels, button text, error messages, tooltips
+         - Skip: import paths, CSS class names, API endpoints, test assertions, debug logs
+      4. Use git MCP to identify which strings are new since the last commit
+      5. Write scan results to data/scans/{timestamp}.json
+
+      Focus on high-confidence, genuinely user-facing strings only.
+    capabilities:
+      mutates_state: true
+      writes_files: true
+
+  generate-translation-keys:
+    mode: agent
+    agent: key-generator
+    directive: |
+      Take the latest scan results and generate structured i18n keys.
+
+      Steps:
+      1. Read the latest file from data/scans/ (sorted by filename, take last)
+      2. Read config/key-config.yaml for naming conventions and namespace rules
+      3. Load locales/en/translation.json to check for existing keys and avoid conflicts
+      4. For each high/medium-confidence string in the scan:
+         - Assign a namespace based on the file path
+         - Generate a semantic key name following existing patterns
+         - Write a context description for translators
+         - Detect pluralization and interpolation patterns
+      5. Write key suggestions to data/keys/{timestamp}.json
+      6. Update locales/en/translation.json with new keys added (don't remove existing keys)
+    capabilities:
+      mutates_state: true
+      writes_files: true
+
+  # === weekly-audit workflow phases ===
+
+  collect-locale-stats:
+    mode: command
+    command:
+      program: bash
+      args: ["-c", "bash scripts/collect-locale-stats.sh"]
+      cwd_mode: project_root
+      timeout_secs: 60
+
+  validate-all-locales:
+    mode: agent
+    agent: locale-validator
+    directive: |
+      Validate all locale files against the canonical English translation.
+
+      Steps:
+      1. Read config/scan-config.yaml for the list of supported_locales
+      2. Load locales/en/translation.json as the source of truth
+      3. For each supported locale, load its translation.json and compare:
+         - Find missing keys (in EN but not in locale)
+         - Find stale keys (in locale but not in EN)
+         - Find empty or fallback values
+         - Check pluralization completeness
+         - Check interpolation variable consistency
+      4. Classify missing keys by criticality (blocking/high/medium/low)
+      5. Compute coverage percentage per locale
+      6. Write detailed validation report to data/reports/validation-{timestamp}.json
+
+      Then emit decision contract:
+      {"verdict": "complete|partial|blocking", "locale_statuses": {...}, "reasoning": "..."}
+    capabilities:
+      mutates_state: true
+      writes_files: true
+    decision_contract:
+      required_fields: [verdict, locale_statuses, reasoning]
+    output_contract:
+      path: "data/reports"
+      format: json
+
+  generate-coverage-dashboard:
+    mode: agent
+    agent: coverage-reporter
+    directive: |
+      Generate the translation coverage dashboard from the latest validation results.
+
+      Steps:
+      1. Read the latest file from data/reports/validation-{timestamp}.json
+      2. Read config/scan-config.yaml for supported locales and thresholds
+      3. Produce a coverage dashboard at output/coverage/{today}.md with:
+         - Overall status (COMPLETE/PARTIAL/BLOCKED)
+         - Coverage table by locale (total keys, translated, missing, stale, coverage %)
+         - Blocking issues list
+         - Missing keys grouped by namespace per locale
+         - Translation velocity (comparison to previous week)
+         - Recommendations for translator focus areas
+      4. Update output/dashboard.md with the condensed live view
+    capabilities:
+      mutates_state: true
+      writes_files: true
+
+  flag-missing-in-pr:
+    mode: agent
+    agent: coverage-reporter
+    directive: |
+      The locale validation found partial or blocking coverage issues.
+      Generate a focused report of what needs translator attention.
+
+      Steps:
+      1. Read the latest validation report from data/reports/
+      2. Identify all locales below the coverage threshold from config/scan-config.yaml
+      3. For each locale below threshold:
+         - List the specific missing keys (sorted by criticality: blocking first)
+         - Group by namespace
+         - Estimate translation effort (word count of English source strings)
+      4. Write output/missing-keys-report-{today}.md with actionable translator assignment lists
+      5. Update output/dashboard.md to reflect current blocking status
+
+      This report will be used to assign translation work.
+    capabilities:
+      mutates_state: true
+      writes_files: true
+
+  # === release-check workflow phases ===
+
+  check-release-coverage:
+    mode: agent
+    agent: locale-validator
+    directive: |
+      Run a focused release-gate coverage check.
+
+      Steps:
+      1. Read config/scan-config.yaml for release_threshold (default 95%) and minimum_threshold (default 80%)
+      2. Read all locale files from locales/*/translation.json
+      3. Read locales/en/translation.json as source of truth
+      4. For each locale, compute:
+         - coverage_pct (translated & non-empty / total EN keys)
+         - blocking_missing (keys in paths marked as release-critical in config)
+         - total_missing count
+      5. Write data/reports/release-check-{timestamp}.json with per-locale status
+
+      Emit decision contract:
+      {"verdict": "complete|partial|blocking", "locale_statuses": {...}, "reasoning": "..."}
+    capabilities:
+      mutates_state: true
+      writes_files: true
+    decision_contract:
+      required_fields: [verdict, locale_statuses, reasoning]
+
+  generate-release-assessment:
+    mode: agent
+    agent: coverage-reporter
+    directive: |
+      Generate the release readiness assessment from the latest coverage check.
+
+      Steps:
+      1. Read the latest release-check report from data/reports/release-check-{timestamp}.json
+      2. Read config/scan-config.yaml for release_threshold and minimum_threshold
+      3. Determine overall verdict:
+         - go: all locales >= release_threshold (default 95%), zero blocking keys
+         - conditional: all locales >= minimum_threshold (80%), some below release_threshold, no blockers
+         - no-go: any locale < minimum_threshold OR any blocking key missing
+      4. Write output/release-check/{today}.md with:
+         - Prominent GO/NO-GO/CONDITIONAL verdict
+         - Per-locale breakdown table
+         - Specific blocking strings (if no-go)
+         - Estimated work to reach GO status
+      5. Update output/dashboard.md with release readiness status
+
+      Emit decision contract:
+      {"verdict": "go|no-go|conditional", "coverage_summary": {...}, "blockers": [], "reasoning": "..."}
+    capabilities:
+      mutates_state: true
+      writes_files: true
+    decision_contract:
+      required_fields: [verdict, coverage_summary, blockers, reasoning]
